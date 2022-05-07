@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   build-frontend:
     docker:
-      - image: cimg/node:13.8.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -19,9 +19,27 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
 
+  build-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Back-end build
+          command: |
+             cd backend
+             npm i
+             npm run build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
       - build-frontend
+      - build-backend
