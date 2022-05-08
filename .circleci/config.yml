@@ -154,7 +154,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["b0:c2:c0:68:f7:83:77:01:39:4b:88:86:83:09:72:1b"]
+          fingerprints: ["a5:59:f0:43:89:81:46:1c:71:dd:81:e9:d7:4d:0f:7f"]
       - attach_workspace:
           at: .
 
@@ -162,6 +162,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
+            pip install awscli
       - run:
           name: Configure server
           command: |
