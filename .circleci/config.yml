@@ -196,7 +196,7 @@ jobs:
             #cat ${CIRCLE_WORKFLOW_ID:0:7}
             then
               curl https://kvdb.io/VhSDnJtAyPpC1NrdQJq9TA/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d 1
-              echo $(curl --insecure  https://kvdb.io/VhSDnJtAyPpC1NrdQJq9TA/migration_${CIRCLE_WORKFLOW_ID:0:7})
+              curl --insecure  https://kvdb.io/VhSDnJtAyPpC1NrdQJq9TA/migration_${CIRCLE_WORKFLOW_ID:0:7}
 
             fi
       # - save_cache:
