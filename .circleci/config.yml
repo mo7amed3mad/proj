@@ -297,7 +297,7 @@ jobs:
             cp artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible/roles/deploy/files
             ls
-            cd /root/prject/.circleci/ansible
+            cd /root/project/.circleci/ansible
             #pwd
             #ls -la project
             #cd prject/.circleci/ansible
