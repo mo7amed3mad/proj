@@ -200,10 +200,10 @@ jobs:
               curl --insecure  https://kvdb.io/VhSDnJtAyPpC1NrdQJq9TA/migration_${CIRCLE_WORKFLOW_ID:0:7}
 
             fi
-       - save_cache:
-           paths: [backend/node_modules]
-           key: backend-build
-      - destroy-environment
+     - save_cache:
+         paths: [backend/node_modules]
+         key: backend-build
+      #- destroy-environment
 
 
   deploy-frontend:
