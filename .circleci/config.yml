@@ -298,9 +298,11 @@ jobs:
             cd .circleci/ansible/roles/deploy/files
             ls
             cd ~
+            pwd
       - run:
           name: Deploy backend
           command: |
+            pwd
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
