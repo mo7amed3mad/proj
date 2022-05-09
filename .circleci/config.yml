@@ -299,6 +299,7 @@ jobs:
             ls
             cd ~
             pwd
+            ls
             cd prject/.circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
