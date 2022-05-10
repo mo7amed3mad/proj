@@ -318,6 +318,8 @@ jobs:
             apk add --update npm
             apk add --update nodejs
             apk add --update curl
+            pip install awscli
+
             
       - run:
           name: Perform Backend smoke test.
