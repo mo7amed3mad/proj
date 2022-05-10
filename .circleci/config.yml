@@ -107,7 +107,7 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       - run:
-          name: front-end analyze
+          name: front-end scan
           command: |
              cd frontend
              npm i
@@ -122,7 +122,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: backend-end analyze
+          name: backend-end scan
           command: |
              cd backend
              npm audit fix --audit-level=critical --force
@@ -143,7 +143,6 @@ jobs:
       - run:
           name: Ensure front-end infrastructure exist
           command: |
-            # Use the workflow id to mark your CloudFormation stacks so that you can reference them later on (ex: rollback). 
             aws cloudformation deploy \
             --template-file .circleci/files/frontend.yml \
             --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
@@ -252,8 +251,6 @@ jobs:
       - run:
           name: Deploy frontend objects
           command: |
-            echo API_URL
-            cat frontend/.env
             cd frontend
             npm install 
             npm run build
@@ -300,7 +297,7 @@ jobs:
             cd /root/project/.circleci/ansible
             #pwd
             #ls -la project
-            #cd prject/.circleci/ansible
+            #cd project/.circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
