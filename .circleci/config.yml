@@ -1,7 +1,7 @@
 version: 2.1
 commands:
   destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given stacks name.     
+    description: Destroy back-end and front-end cloudformation stacks given stacks name..     
     steps:
       - run:
           name: Destroy backend
