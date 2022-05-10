@@ -312,10 +312,12 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            apk add --update ansible
+            apk add --update gzip
+            apk add --update tar
             apk add --update npm
             apk add --update nodejs
             apk add --update curl
-            pip install awscli
             
       - run:
           name: Perform Backend smoke test.
