@@ -374,12 +374,12 @@ jobs:
               return 1
             fi 
             
-      - destroy-environment:
-          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
-          event: on_fail 
+      #- destroy-environment:
+      #    workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+      #    event: on_fail 
 
-      - revert-migrations:
-          workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
+      #- revert-migrations:
+      #    workflowID: ${CIRCLE_WORKFLOW_ID:0:7}
 workflows:
   say-hello-workflow:
     jobs:
