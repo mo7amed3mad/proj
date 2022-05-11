@@ -29,6 +29,7 @@
     
 - name: prapare backend
   shell: |
+    cd /home/ubuntu/
     mkdire backend
    
 
