@@ -6,45 +6,21 @@
     state: latest
     update_cache: yes
 
-
-- name: "Add nodejs 13.x"
-  shell: |
-    curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash 
-    sudo apt-get install -y nodejs
-    
-- name: Install nodejs
-  become: yes
-  apt:
-   update_cache: yes
-   name: nodejs
-   state: present
-
-- name: install pm2
-  become: yes
-  npm:
-    name: pm2
-    global: yes
-    state: latest
-    production: yes
-    
-- name: prapare backend
-  shell: |
-    cd /home/ubuntu/
-    mkdir backend
-   
-
 - name: copy built backend files
   become: yes
   copy:
-    src: artifact.tar.gz
-    dest: /home/ubuntu/backend
+    src: /root/project/artifact.tar.gz
+    dest: /home/ubuntu/artifact.tar.gz
 
 - name: Extract backend
   shell: |
-    cd /home/ubuntu/backend
-    tar -xzvf artifact.tar.gz
+    cd /home/ubuntu/
+    tar xvzf artifact.tar.gz -C .
+    
+    
 - name: Start pm2
   shell: |    
+    cd /home/ubuntu/
     npm i
     pm2 stop default
     pm2 start npm -- start
