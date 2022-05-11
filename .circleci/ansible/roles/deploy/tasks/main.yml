@@ -6,10 +6,10 @@
     state: latest
     update_cache: yes
 
-- name: "Add nodejs apt key"
-  apt_key:
-   url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-   state: present
+#- name: "Add nodejs apt key"
+#  apt_key:
+#   url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+#   state: present
 
 - name: "Add nodejs 13.x ppa for apt repo"
   apt_repository:
