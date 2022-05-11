@@ -163,15 +163,19 @@ jobs:
           paths:
                 - .circleci/ansible/inventory.txt
       - destroy-environment
+      
   configure-infrastructure:
     docker:
       - image: python:3.7-alpine
+        environment:
+            ANSIBLE_HOST_KEY_CHECKING: "no"
+      
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints: ["a5:59:f0:43:89:81:46:1c:71:dd:81:e9:d7:4d:0f:7f"]
       - attach_workspace:
-          at: .
+         at: ~/
 
       - run:
           name: Install dependencies
@@ -226,6 +230,9 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - attach_workspace:
+          at: ~
+          
       - run:
           name: Install Amazon Cli
           command: |
@@ -240,8 +247,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            #echo ENVIRONMENT=production  >> frontend/.env
-            #echo NODE_ENV=production >> frontend/.env
+
             export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
@@ -268,7 +274,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["a5:59:f0:43:89:81:46:1c:71:dd:81:e9:d7:4d:0f:7f"]
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -288,19 +294,26 @@ jobs:
             npm i
             npm run build
             cd ..
+            
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
-            mkdir -v .circleci/ansible/roles/deploy/files
-            cp artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
-            cd .circleci/ansible/roles/deploy/files
-            ls
-            cd /root/project/.circleci/ansible
+            #mkdir -v .circleci/ansible/roles/deploy/files
+            #cp artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+            #cd .circleci/ansible/roles/deploy/files
+            #ls
+            #cd /root/project/.circleci/ansible
             #pwd
             #ls -la project
             #cd project/.circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            #echo "Contents  of the inventory.txt file is -------"
+            #cat inventory.txt
+            #ansible-playbook -i inventory.txt deploy-backend.yml
+      - run:
+          name: Deploy backend ad
+          command: |
+            export ANSIBLE_HOST_KEY_CHECKING=False
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
+            
       - destroy-environment
       - revert-migrations
       
