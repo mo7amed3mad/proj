@@ -274,7 +274,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["a5:59:f0:43:89:81:46:1c:71:dd:81:e9:d7:4d:0f:7f"]
       - attach_workspace:
-          at: ~/
+          at: .
       - run:
           name: Install dependencies
           command: |
@@ -285,7 +285,8 @@ jobs:
             apk add --update nodejs
             apk add --update curl
             pip install awscli
-            
+      # adding this step to add env variables to the backend so it can be migrated to the ec2 instance
+      # This consumed a lot of time investigating
       - run:
           name: updating env variables
           command: |
@@ -297,10 +298,9 @@ jobs:
             echo "TYPEORM_USERNAME=${TYPEORM_USERNAME}" >> backend/.env
             echo "TYPEORM_PASSWORD=${TYPEORM_PASSWORD}" >> backend/.env
             echo "TYPEORM_DATABASE=${TYPEORM_DATABASE}" >> backend/.env
-            echo "ENVIRONMENT: production" >> backend/.env            
-
+            echo "ENVIRONMENT: production" >> backend/.env
       - run:
-          name: prepare backend
+          name: Prepare deploy backend
           command: |
             cd backend
             npm i
@@ -314,14 +314,12 @@ jobs:
             ls
             cd ~
       - run:
-          name: Deploy backend ad
+          name: Deploy backend
           command: |
-            #export ANSIBLE_HOST_KEY_CHECKING=False
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-            
       - destroy-environment
       - revert-migrations
       
