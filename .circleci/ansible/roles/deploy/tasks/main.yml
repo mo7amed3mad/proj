@@ -17,7 +17,17 @@
 #     update_cache: yes
 
 
-
+- name: install pm2
+  npm:
+    name: pm2
+    global: yes
+    state: present
+    
+- name: ensure pm2 service is started
+  service:·
+    name: pm2
+    state: started
+    enabled: yes
 
 
 - name: copy built backend files
