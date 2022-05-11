@@ -30,7 +30,7 @@
 - name: prapare backend
   shell: |
     cd /home/ubuntu/
-    mkdire backend
+    mkdir backend
    
 
 - name: copy built backend files
