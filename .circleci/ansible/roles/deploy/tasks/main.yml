@@ -18,13 +18,7 @@
 
 
 
-- name: install pm2
-  become: yes
-  npm:
-    name: pm2
-    global: yes
-    state: latest
-    production: yes
+
 
 - name: copy built backend files
   become: yes
