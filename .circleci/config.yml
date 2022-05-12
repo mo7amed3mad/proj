@@ -410,6 +410,36 @@ jobs:
               --tags project=udapeople
             echo OldWorkflowID: "${OldWorkflowID}"
             echo Current Workfolw Id:"${CIRCLE_WORKFLOW_ID:0:7}"
+            
+  cleanup:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Get old stack workflow id
+          command: |
+            export OldWorkflowID=$(curl --insecure  https://kvdb.io/VhSDnJtAyPpC1NrdQJq9TA/OldWorkflowID_${CIRCLE_WORKFLOW_ID:0:7})
+            echo OldWorkflowID: "${OldWorkflowID}"
+            echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+            # Fetch the stack names          
+            export STACKS=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+                        --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
+            echo Stacks: "${STACKS}"
+              if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
+              then
+                if [[ "${STACKS}"  != 0 ]]
+                then
+                  echo "cleanup is required"
+                  aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+                  aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+                  aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+                else
+                  echo 'cleanup is not applicable'
+                fi
+              else  
+                echo 'cleanup is not applicable'
+              fi
 workflows:
   say-hello-workflow:
     jobs:
